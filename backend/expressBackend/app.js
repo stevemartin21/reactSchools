@@ -1,3 +1,20 @@
+/*
+"C:\Program Files\MongoDB\Server\3.6\bin\mongod.exe"
+"C:\Program Files\MongoDB\Server\3.6\bin\mongo.exe"
+Connection to the database and mongo shell
+*/
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const multer = require('multer');
+const passport = require('passport');
+const jwt = require('jsonwebtoken');
+const GridFsStorage = require('multer-gridfs-storage');
+const Grid = require('gridfs-stream');
+// imported model route
+
+
+
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -6,8 +23,31 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var createRouter = require('./routes/create');
+var readRouter = require('./routes/read');
+var updateRouter = require('./routes/update');
+var deleteRouter = require('./routes/delete');
+
+let gfs;
+//  Connect to the church web site with mongoose and create connetion
+mongoose.connect('mongodb://localhost/reactSchools');
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+// Open connection and use grid fs to upload image
+db.once('open', function () {
+   gfs = Grid(db.db, mongoose.mongo);
+  	console.log('we are connected')
+  // all set!
+  gfs.collection('uploads')
+})
+
 
 var app = express();
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
+app.use(cors());
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -19,8 +59,16 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(passport.initialize());
+
+require('./config/passport')(passport);
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/create', createRouter);
+app.use('/read', readRouter);
+app.use('/update', updateRouter);
+app.use('/delete', deleteRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

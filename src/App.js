@@ -1,18 +1,30 @@
 import React, { Component } from 'react';
-import { Button } from "mdbreact";
-import logo from './logo.png';
+ import { BrowserRouter as Router , Route } from 'react-router-dom';
+
+import NavBar from './components/layout/NavBar';
+import Footer from './components/layout/Footer';
+import Jumbotron from './components/layout/Jumbotron';
+import Register from './components/auth/Register';
+import Login from './components/auth/Login';
+import Features from './components/home/Features';
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <header className="App-header ">
-          <img src={logo} alt="logo" className="App-logo" />
-          <h1 className="App-title">Welcome to Your MDB React App</h1>
-        </header>
-        <p className="mb-2">The application is configured and ready to import our components.</p>
-        <Button href="https://mdbootstrap.com/react/" target="blank" color="light-blue"><strong>Check out our docs!</strong></Button>
+      <Router>
+      <div>
+          <NavBar />
+          
+          <Route exact path='/' component={Jumbotron} />
+          
+          <Route exact path='/register' component={Register} />
+          <Route exact path='/login' component={Login} />
+          
+
+          <Footer />
+
       </div>
+      </Router>
     );
   }
 }
