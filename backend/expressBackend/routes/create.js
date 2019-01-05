@@ -8,6 +8,10 @@ const passport = require('passport');
 var User = require('../models/user');
 var School = require('../models/school');
 
+// Validate Input 
+
+const validateRegisterInput = require('../validation/register');
+const validateLoginInput = require('../validation/login');
 router.get(
     '/current',
     passport.authenticate('jwt', { session: false }),
@@ -23,7 +27,14 @@ router.get(
 
 router.post('/user', (req, res, next) => {
     console.log(req.body);
-    console.log('one')
+    console.log('one');
+
+    const { errors, isValid } = validateRegisterInput(req.body);
+
+    if (!isValid) {
+        return res.status(400).json(errors);
+      }
+    
     User.findOne({email: req.body.email})
         .then(user => {
         console.log('2')
@@ -58,7 +69,15 @@ router.post('/user', (req, res, next) => {
 
 
 let selectedUser;
+
 router.post('/token', (req, res ) => {
+
+    const { errors, isValid } = validateLoginInput(req.body); 
+    
+    if (!isValid) {
+        return res.status(400).json(errors);
+      }
+
     User.findOne({email: req.body.email}).then(user => {
         if(!user){
             res.status(400).json({message: 'There was no user with that email'})
