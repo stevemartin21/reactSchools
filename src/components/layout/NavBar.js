@@ -13,6 +13,8 @@ import { logoutUser } from '../../actions/authActions';
   }
   render() {
 
+    
+
     const { isAuthenticated, user } = this.props.auth;
 
     const authLinks = (
@@ -23,7 +25,11 @@ import { logoutUser } from '../../actions/authActions';
         </Link>
       </li>
       <li className="nav-item">
-        <Link className="nav-link"  to='/schools' >Manage Schools Schools</Link>
+        <Link className="nav-link"  to='/manageSchools' >Manage Schools </Link>
+      </li>
+
+      <li className="nav-item">
+        <Link className="nav-link"  to='/addSchool' >Add School</Link>
       </li>
     
       <li className="nav-item">
@@ -40,7 +46,7 @@ import { logoutUser } from '../../actions/authActions';
         </Link>
       </li>
       <li className="nav-item">
-        <Link className="nav-link"  to='/schools' >Search Schools</Link>
+        <Link className="nav-link"  to='/displaySchools' >See Schools </Link>
       </li>
       <li className="nav-item">
         <Link className="nav-link"  to='/register' >Register</Link>

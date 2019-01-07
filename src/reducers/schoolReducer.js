@@ -1,4 +1,4 @@
-import { GET_SCHOOL, SCHOOL_LOADING } from '../actions/types';
+import { GET_SCHOOL, SCHOOL_LOADING, GET_SCHOOLS } from '../actions/types';
 
 
 const initialState = {
@@ -18,6 +18,12 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 school: action.payload,
+                isLoading: false
+            }
+            case GET_SCHOOLS: 
+            return {
+                ...state,
+                schools: action.payload,
                 isLoading: false
             }
         default:

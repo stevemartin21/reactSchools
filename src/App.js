@@ -1,16 +1,23 @@
 import React, { Component } from 'react';
- import { BrowserRouter as Router , Route } from 'react-router-dom';
+ import { BrowserRouter as Router , Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import jwt_decode from 'jwt-decode';
 import setAuthToken from './utils/setAuthToken';
 import { setCurrentUser, logoutUser} from './actions/authActions';
 import store from './store';
+
+import PrivateRouter from './components/PrivateRouter';
 import NavBar from './components/layout/NavBar';
 import Footer from './components/layout/Footer';
 import Jumbotron from './components/layout/Jumbotron';
+import Dashboard from './components/schools/Dashboard';
 import Register from './components/auth/Register';
 import Login from './components/auth/Login';
+import AddSchool from './components/schools/AddSchool';
 import Features from './components/home/Features';
+import ManageSchools from './components/schools/ManageSchools';
+import DisplaySchools from './components/schools/DisplaySchools';
+import EditSchool from './components/schools/EditSchool';
 
 // Check for token
 if (localStorage.jwtToken) {
@@ -44,13 +51,17 @@ class App extends Component {
           <NavBar />
           
           <Route exact path='/' component={Jumbotron} />
-          
           <Route exact path='/register' component={Register} />
           <Route exact path='/login' component={Login} />
-          
+          <Route exact path='/displaySchools' component={DisplaySchools} />
+          <Switch>
+              <PrivateRouter exact path='/dashboard' component={Dashboard} />
+              <PrivateRouter exact path='/addSchool' component={AddSchool} />
+              <PrivateRouter exact path='/manageSchools' component={ManageSchools} />
+              <PrivateRouter exact path='/editSchool/:id' component={EditSchool} />
+          </Switch>
 
           <Footer />
-
       </div>
       </Router>
       </Provider>
